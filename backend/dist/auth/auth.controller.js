@@ -20,8 +20,29 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async login(dto) {
-        return this.authService.login(dto);
+    async login(dto, res) {
+        const { refreshToken, ...response } = await this.authService.login(dto);
+        this.authService.addRefreshTokenToRes(res, refreshToken);
+        return response;
+    }
+    async register(dto, res) {
+        const { refreshToken, ...response } = await this.authService.register(dto);
+        this.authService.addRefreshTokenToRes(res, refreshToken);
+        return response;
+    }
+    async logout(res) {
+        this.authService.removeRefreshTokenFromRes(res);
+        return true;
+    }
+    async getNewTokens(req, res) {
+        const refreshTokenFromCookies = req.cookies[this.authService.REFRESH_TOKEN_NAME];
+        if (!refreshTokenFromCookies) {
+            this.authService.removeRefreshTokenFromRes(res);
+            throw new common_1.UnauthorizedException('Refresh token not passed');
+        }
+        const { refreshToken, ...response } = await this.authService.getNewTokens(refreshTokenFromCookies);
+        this.authService.addRefreshTokenToRes(res, refreshToken);
+        return response;
     }
 };
 exports.AuthController = AuthController;
@@ -30,10 +51,38 @@ __decorate([
     (0, common_1.HttpCode)(200),
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.AuthDto]),
+    __metadata("design:paramtypes", [auth_dto_1.AuthDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.AuthDto, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('logout'),
+    __param(0, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('login/access-token'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getNewTokens", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

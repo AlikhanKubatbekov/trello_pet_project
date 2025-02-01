@@ -1,32 +1,24 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Auth } from '@/auth/decorators/auth.decorator';
+import { CurrentUser } from '@/auth/decorators/user.decorator';
+import { Body, Controller, Get, HttpCode, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { UserDto } from './user.dto';
 import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('user/profile')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Post()
-  // create(@Body() createUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
-
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Auth()
+  async profile(@CurrentUser('id') id: string) {
+    return this.userService.getProfile(id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
-  }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Put()
+  @Auth()
+  async updateProfile(@CurrentUser('id') id: string, @Body() dto: UserDto) {
+    return this.userService.update(id, dto);
   }
 }

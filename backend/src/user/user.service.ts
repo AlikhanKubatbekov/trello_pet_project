@@ -97,6 +97,10 @@ export class UserService {
         id,
       },
       data,
+      select: {
+        name: true,
+        email: true,
+      },
     });
   }
 

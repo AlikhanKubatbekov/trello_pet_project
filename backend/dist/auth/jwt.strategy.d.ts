@@ -1,6 +1,6 @@
-import { Strategy } from 'passport-jwt';
+import { UserService } from '@/user/user.service';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '../user/user.service';
+import { Strategy } from 'passport-jwt';
 declare const JwtStrategy_base: new (...args: any[]) => Strategy;
 export declare class JwtStrategy extends JwtStrategy_base {
     private configService;
@@ -10,23 +10,23 @@ export declare class JwtStrategy extends JwtStrategy_base {
         id: string;
     }): Promise<({
         tasks: {
+            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
             priority: import(".prisma/client").$Enums.Priority | null;
             isCompleted: boolean | null;
             userId: string;
         }[];
     } & {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         email: string;
-        name: string | null;
         password: string;
         workInterval: number | null;
         breakInterval: number | null;
+        name: string | null;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
         intervalsCount: number | null;
     }) | null>;
 }

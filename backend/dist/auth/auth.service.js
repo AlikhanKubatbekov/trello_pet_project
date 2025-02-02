@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
+const user_service_1 = require("../user/user.service");
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
-const user_service_1 = require("../user/user.service");
 const argon2_1 = require("argon2");
 let AuthService = class AuthService {
     constructor(jwt, userService) {
@@ -44,7 +44,7 @@ let AuthService = class AuthService {
         const result = await this.jwt.verifyAsync(refreshToken);
         if (!result)
             throw new common_1.UnauthorizedException('Invalid refresh token');
-        const { ...user } = await this.userService.findOne(result.id);
+        const { ...user } = await this.userService.getById(result.id);
         const tokens = this.issueTokens(user.id);
         return {
             user,

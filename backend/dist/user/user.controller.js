@@ -13,45 +13,44 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
+const auth_decorator_1 = require("../auth/decorators/auth.decorator");
+const user_decorator_1 = require("../auth/decorators/user.decorator");
 const common_1 = require("@nestjs/common");
+const user_dto_1 = require("./user.dto");
 const user_service_1 = require("./user.service");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    findAll() {
-        return this.userService.findAll();
+    async profile(id) {
+        return this.userService.getProfile(id);
     }
-    findOne(id) {
-        return this.userService.findOne(id);
-    }
-    remove(id) {
-        return this.userService.remove(+id);
+    async updateProfile(id, dto) {
+        return this.userService.update(id, dto);
     }
 };
 exports.UserController = UserController;
 __decorate([
     (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, auth_decorator_1.Auth)(),
+    __param(0, (0, user_decorator_1.CurrentUser)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findOne", null);
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "profile", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Put)(),
+    (0, auth_decorator_1.Auth)(),
+    __param(0, (0, user_decorator_1.CurrentUser)('id')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "remove", null);
+    __metadata("design:paramtypes", [String, user_dto_1.UserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateProfile", null);
 exports.UserController = UserController = __decorate([
-    (0, common_1.Controller)('user'),
+    (0, common_1.Controller)('user/profile'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

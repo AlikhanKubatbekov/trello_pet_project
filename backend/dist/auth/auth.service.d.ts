@@ -1,7 +1,7 @@
+import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
-import { AuthDto } from './dto/auth.dto';
 import { Response } from 'express';
+import { AuthDto } from './dto/auth.dto';
 export declare class AuthService {
     private jwt;
     private userService;
@@ -12,13 +12,13 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
         user: {
+            email: string;
+            workInterval: number | null;
+            breakInterval: number | null;
+            name: string | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
-            name: string | null;
-            workInterval: number | null;
-            breakInterval: number | null;
             intervalsCount: number | null;
         };
     }>;
@@ -26,13 +26,13 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
         user: {
+            email: string;
+            workInterval: number | null;
+            breakInterval: number | null;
+            name: string | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
-            name: string | null;
-            workInterval: number | null;
-            breakInterval: number | null;
             intervalsCount: number | null;
         };
     }>;
@@ -41,22 +41,22 @@ export declare class AuthService {
         refreshToken: string;
         user: {
             tasks: {
+                name: string;
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                name: string;
                 priority: import(".prisma/client").$Enums.Priority | null;
                 isCompleted: boolean | null;
                 userId: string;
             }[];
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
             email: string;
-            name: string | null;
             password: string;
             workInterval: number | null;
             breakInterval: number | null;
+            name: string | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
             intervalsCount: number | null;
         };
     }>;

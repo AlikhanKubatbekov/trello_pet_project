@@ -10,9 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
-const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
+const common_1 = require("@nestjs/common");
 const argon2_1 = require("argon2");
+const date_fns_1 = require("date-fns");
 let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -27,10 +28,7 @@ let UserService = class UserService {
             data: user,
         });
     }
-    findAll() {
-        return `This action returns all user`;
-    }
-    findOne(id) {
+    getById(id) {
         return this.prisma.user.findUnique({
             where: {
                 id,
@@ -47,8 +45,59 @@ let UserService = class UserService {
             },
         });
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async getProfile(id) {
+        const profile = await this.getById(id);
+        const todayStart = (0, date_fns_1.startOfDay)(new Date());
+        const weekStart = (0, date_fns_1.startOfDay)((0, date_fns_1.subDays)(new Date(), 7));
+        const totalTasks = profile?.tasks.length;
+        const completedTasks = await this.prisma.task.count({
+            where: {
+                userId: id,
+                isCompleted: true,
+            },
+        });
+        const todayTasks = await this.prisma.task.count({
+            where: {
+                userId: id,
+                createdAt: {
+                    gte: todayStart.toISOString(),
+                },
+            },
+        });
+        const weekTasks = await this.prisma.task.count({
+            where: {
+                userId: id,
+                createdAt: {
+                    gte: weekStart.toISOString(),
+                },
+            },
+        });
+        const { password, ...rest } = profile || {};
+        return {
+            user: rest,
+            statistics: [
+                { label: 'Total', value: totalTasks },
+                { label: 'Completed tasks', value: completedTasks },
+                { label: 'Today tasks', value: todayTasks },
+                { label: 'Week tasks', value: weekTasks },
+            ],
+        };
+    }
+    async update(id, dto) {
+        let data = dto;
+        if (dto.password) {
+            data = { ...dto, password: await (0, argon2_1.hash)(dto.password) };
+        }
+        return this.prisma.user.update({
+            where: {
+                id,
+            },
+            data,
+            select: {
+                name: true,
+                email: true,
+            },
+        });
     }
     remove(id) {
         return `This action removes a #${id} user`;

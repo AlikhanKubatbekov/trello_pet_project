@@ -1,52 +1,80 @@
-import { PrismaService } from '../prisma.service';
-import { AuthDto } from '../auth/dto/auth.dto';
+import { AuthDto } from '@/auth/dto/auth.dto';
+import { PrismaService } from '@/prisma.service';
+import { UserDto } from './user.dto';
 export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
     create(dto: AuthDto): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         email: string;
-        name: string | null;
         password: string;
         workInterval: number | null;
         breakInterval: number | null;
+        name: string | null;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
         intervalsCount: number | null;
     }>;
-    findAll(): string;
-    findOne(id: string): import(".prisma/client").Prisma.Prisma__UserClient<({
+    getById(id: string): import(".prisma/client").Prisma.Prisma__UserClient<({
         tasks: {
+            name: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
             priority: import(".prisma/client").$Enums.Priority | null;
             isCompleted: boolean | null;
             userId: string;
         }[];
     } & {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         email: string;
-        name: string | null;
         password: string;
         workInterval: number | null;
         breakInterval: number | null;
+        name: string | null;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
         intervalsCount: number | null;
-    }) | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
+    }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     getByEmail(email: string): import(".prisma/client").Prisma.Prisma__UserClient<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         email: string;
-        name: string | null;
         password: string;
         workInterval: number | null;
         breakInterval: number | null;
+        name: string | null;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
         intervalsCount: number | null;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
-    update(id: number, updateUserDto: AuthDto): string;
+    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    getProfile(id: string): Promise<{
+        user: {
+            tasks: {
+                name: string;
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                priority: import(".prisma/client").$Enums.Priority | null;
+                isCompleted: boolean | null;
+                userId: string;
+            }[];
+            email: string;
+            workInterval: number | null;
+            breakInterval: number | null;
+            name: string | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            intervalsCount: number | null;
+        } | {};
+        statistics: {
+            label: string;
+            value: number | undefined;
+        }[];
+    }>;
+    update(id: string, dto: UserDto): Promise<{
+        email: string;
+        name: string | null;
+    }>;
     remove(id: number): string;
 }

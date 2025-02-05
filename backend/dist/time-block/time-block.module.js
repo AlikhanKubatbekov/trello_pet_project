@@ -6,19 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.TimeBlockModule = void 0;
 const common_1 = require("@nestjs/common");
-const config_1 = require("@nestjs/config");
-const auth_module_1 = require("./auth/auth.module");
-const task_module_1 = require("./task/task.module");
-const time_block_module_1 = require("./time-block/time-block.module");
-const user_module_1 = require("./user/user.module");
-let AppModule = class AppModule {
+const prisma_service_1 = require("../prisma.service");
+const time_block_controller_1 = require("./time-block.controller");
+const time_block_service_1 = require("./time-block.service");
+let TimeBlockModule = class TimeBlockModule {
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
+exports.TimeBlockModule = TimeBlockModule;
+exports.TimeBlockModule = TimeBlockModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot(), auth_module_1.AuthModule, user_module_1.UserModule, task_module_1.TaskModule, time_block_module_1.TimeBlockModule],
+        controllers: [time_block_controller_1.TimeBlockController],
+        providers: [time_block_service_1.TimeBlockService, prisma_service_1.PrismaService],
+        exports: [time_block_service_1.TimeBlockService],
     })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+], TimeBlockModule);
+//# sourceMappingURL=time-block.module.js.map

@@ -7,11 +7,14 @@ import { DASHBOARD_PAGES } from '@/config/pages-url.config';
 import { authService } from '@/services/auth.service';
 import { IAuthForm } from '@/types/auth.types';
 import { useMutation } from '@tanstack/react-query';
+import cn from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import styles from './auth.module.css';
 
 export function Auth() {
   const { register, handleSubmit, reset } = useForm<IAuthForm>({
@@ -38,7 +41,7 @@ export function Auth() {
 
   return (
     <div className='flex min-h-screen'>
-      <form className='w-1/4 m-auto shadow bg-sidebar rounded-xl p-layout' onSubmit={handleSubmit(onSubmit)}>
+      <form className={cn(styles.form)} onSubmit={handleSubmit(onSubmit)}>
         <Heading title='Auth' />
 
         <Field
@@ -63,7 +66,7 @@ export function Auth() {
           extra='mb-6'
         />
 
-        <div className='flex items-center gap-5 justify-center'>
+        <div className={cn(styles.buttonActions)}>
           <Button onClick={() => setIsLoginForm(true)}>Login</Button>
           <Button onClick={() => setIsLoginForm(false)}>Register</Button>
         </div>

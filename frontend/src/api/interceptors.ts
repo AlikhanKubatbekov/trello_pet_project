@@ -5,7 +5,7 @@ import axios, { type CreateAxiosDefaults } from 'axios';
 import { errorCatch } from './error';
 
 const options: CreateAxiosDefaults = {
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },

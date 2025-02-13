@@ -1,0 +1,8 @@
+.form {
+  @apply w-11/12 sm:w-2/3 md:w-2/4 2xl:w-1/4;
+  @apply m-auto shadow bg-sidebar rounded-xl p-layout;
+}
+
+.buttonActions {
+  @apply flex items-center gap-5 justify-center;
+}

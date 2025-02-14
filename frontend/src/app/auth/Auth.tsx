@@ -7,6 +7,7 @@ import { DASHBOARD_PAGES } from '@/config/pages-url.config';
 import { authService } from '@/services/auth.service';
 import { IAuthForm } from '@/types/auth.types';
 import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import cn from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -32,6 +33,17 @@ export function Auth() {
       toast.success('Successfully login!');
       reset();
       push(DASHBOARD_PAGES.HOME);
+    },
+    onError: (e) => {
+      if (isAxiosError(e) && e.response) {
+        const { message } = e.response.data;
+
+        console.log(e.response);
+        const errorMessage = Array.isArray(message) ? message.join(', ') : message;
+        toast.error(errorMessage);
+      } else {
+        toast.error('Some error happened!');
+      }
     },
   });
 

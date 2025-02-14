@@ -1,8 +1,8 @@
 'use client';
 
-import { Heading } from '@/components/ui/Heading';
 import { Button } from '@/components/ui/buttons/Button';
 import { Field } from '@/components/ui/fields/Field';
+import { Heading } from '@/components/ui/heading/Heading';
 import { DASHBOARD_PAGES } from '@/config/pages-url.config';
 import { authService } from '@/services/auth.service';
 import { IAuthForm } from '@/types/auth.types';

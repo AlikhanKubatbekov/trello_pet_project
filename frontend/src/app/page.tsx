@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
-  return <></>;
+  return <Link href={'/auth'}>Click me for login</Link>;
 }
